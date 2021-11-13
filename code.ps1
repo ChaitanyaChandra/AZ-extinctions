@@ -1,3 +1,12 @@
+# install choco
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+
+# install git
+choco install git -y
+
+# install microsoft edge
+choco install microsoft-edge -y
+
 # install ssh client
 Add-WindowsCapability -Online -Name OpenSSH.Client~~~~0.0.1.0
 
@@ -20,3 +29,7 @@ if (!(Get-NetFirewallRule -Name "OpenSSH-Server-In-TCP" -ErrorAction SilentlyCon
 
 # powershell remote over ssh
 # https://docs.microsoft.com/en-us/powershell/scripting/learn/remoting/ssh-remoting-in-powershell-core?view=powershell-7.2
+Subsystem powershell c:/progra~1/powershell/7/pwsh.exe -sshs -NoLogo
+
+# restart sshd
+Restart-Service sshd
