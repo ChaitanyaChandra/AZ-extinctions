@@ -29,7 +29,7 @@ if (!(Get-NetFirewallRule -Name "OpenSSH-Server-In-TCP" -ErrorAction SilentlyCon
 New-ItemProperty -Path "HKLM:\SOFTWARE\OpenSSH" -Name DefaultShell -Value "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -PropertyType String -Force
 
 # enable winrm && powershell remote
-winrm quickconfig
+winrm quickconfig -Force
 Enable-PSRemoting -Force
 
 # winrm config
