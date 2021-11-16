@@ -4,7 +4,6 @@ Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManage
 # install git 
 choco install git -y
 
-
 # install ssh client
 Add-WindowsCapability -Online -Name OpenSSH.Client~~~~0.0.1.0
 
@@ -29,6 +28,18 @@ if (!(Get-NetFirewallRule -Name "OpenSSH-Server-In-TCP" -ErrorAction SilentlyCon
 # default powershell for openssh
 New-ItemProperty -Path "HKLM:\SOFTWARE\OpenSSH" -Name DefaultShell -Value "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -PropertyType String -Force
 
-# enable powershell remote
+# enable winrm && powershell remote
+winrm quickconfig
 Enable-PSRemoting -Force
-# Get-NetFirewallRule -Name 'WINRM*' | Select-Object Name
+
+# winrm config
+winrm set winrm/config/client/auth '@{Basic="true"}'
+winrm set winrm/config/service/auth '@{Basic="true"}'
+winrm set winrm/config/service '@{AllowUnencrypted="true"}'
+winrm set winrm/config/winrs '@{MaxMemoryPerShellMB="300"}'
+winrm set winrm/config '@{MaxTimeoutms="1800000"}'
+netsh advfirewall firewall add rule name="WinRM HTTP" protocol=TCP dir=in profile=any localport=5985 remoteip=any localip=any action=allow
+netsh advfirewall firewall add rule name="WinRM HTTPS" protocol=TCP dir=in profile=any localport=5986 remoteip=any localip=any action=allow
+net stop winrm
+sc.exe config winrm start=auto
+net start winrm
