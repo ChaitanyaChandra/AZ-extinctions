@@ -39,3 +39,6 @@ net start winrm
 
 # port forwording
 Install-WindowsFeature RemoteAccess
+
+# install feature
+Install-WindowsFeature Routing
