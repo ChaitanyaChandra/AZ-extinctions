@@ -37,3 +37,5 @@ net stop winrm
 sc.exe config winrm start=auto
 net start winrm
 
+# port forwording
+Install-WindowsFeature RemoteAccess
