@@ -25,20 +25,17 @@ New-ItemProperty -Path "HKLM:\SOFTWARE\OpenSSH" -Name DefaultShell -Value "C:\Wi
 winrm quickconfig -Force
 Enable-PSRemoting -Force
 
+# changing winrm port 
+#winRM e winrm/config/listener
+winrm set winrm/config/listener?Address=*+Transport=HTTP '@{Port="8080"}'
+
 # winrm config
 winrm set winrm/config/client/auth '@{Basic="true"}'
 winrm set winrm/config/service/auth '@{Basic="true"}'
 winrm set winrm/config/service '@{AllowUnencrypted="true"}'
 winrm set winrm/config/winrs '@{MaxMemoryPerShellMB="300"}'
 winrm set winrm/config '@{MaxTimeoutms="1800000"}'
-netsh advfirewall firewall add rule name="WinRM HTTP" protocol=TCP dir=in profile=any localport=5985 remoteip=any localip=any action=allow
-netsh advfirewall firewall add rule name="WinRM HTTPS" protocol=TCP dir=in profile=any localport=5986 remoteip=any localip=any action=allow
+netsh advfirewall firewall add rule name="WinRM HTTP" protocol=TCP dir=in profile=any localport=8080 remoteip=any localip=any action=allow
 net stop winrm
 sc.exe config winrm start=auto
 net start winrm
-
-# port forwording
-Install-WindowsFeature RemoteAccess
-
-# install feature
-Install-WindowsFeature Routing
